@@ -26,6 +26,10 @@ void Pwm::setForPca (int rank, int degree)
 
 void Pwm::set (int rank, int degree)
 {
+	Serial.print("rank:");
+	Serial.print(rank);
+	Serial.print("degree:");
+	Serial.println(degree);
 	int realDegree = degree + degreeError[rank];
 	if (rank < SERVO_ON_MEGA)
 		setForMega (rank, realDegree);

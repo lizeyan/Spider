@@ -17,12 +17,15 @@
  ****************************************************/
 #include "distance.h"
 #include "pwm.h"
+#include "control.h"
+#include <string.h>
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
 // called this way, it uses the default address 0x40
 Pwm pwm;
 Distance distance;
+Control control;
 // you can also call it with a different address you want
 //Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
 
@@ -35,28 +38,40 @@ Distance distance;
 uint8_t servonum = 0;
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("16 channel Servo test!");
 #ifdef ESP8266
   Wire.pins(2, 14);   // ESP8266 can use any two pins, such as SDA to #2 and SCL to #14
 #endif
+  control.setup();
   distance.setup();
   pwm.setup();
 }
-
+void runCmd()
+{
+  int cmd = control.getCmd();
+  if (cmd == MV)
+    control.moveForward (control.getArg());
+  else if (cmd == TL)
+    control.turn (control.getArg());
+  else if (cmd == TR)
+    control.turn (-control.getArg());
+  else if (cmd == SC)
+  {
+    int rank = control.getArg();
+    int degree = control.getArg();
+    Serial.print("rank:");
+    Serial.print(rank);
+    Serial.print("degree:");
+    Serial.println(degree);
+    pwm.set (rank, degree);
+  }
+}
+int loopNum = 0;
 // you can use this function if you'd like to set the pulse length in seconds
 // e.g. setServoPulse(0, 0.001) is a ~1 millisecond pulse width. its not precise!
-void loop() {
-  distance.update();
-  distance.echoAll();
-  pwm.set (5, 0);
-  delay (2000);
-  pwm.set (5, 45);
-  delay (2000);
-  pwm.set (5, 90);
-  delay (2000);
-  pwm.set (5, 135);
-  delay (2000);
-  pwm.set (5, 180);
-  delay (2000);
+void loop() 
+{
+  Serial.println(loopNum++);
+  delay (500);
+  if (control.mode() == CONTROLED)
+    runCmd();
 }
