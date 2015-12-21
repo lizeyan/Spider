@@ -11,12 +11,12 @@ void serialEvent ()
 {
 	while (Serial.available()) 
 	{
-	    // get the new byte:
-	    char inChar = (char)Serial.read();
-	    // add it to the inputString:
-	    Serial.write(inChar);
-	    buffer[tail] = inChar;
-	    tail = (++tail) % bufferSize;
+		// get the new byte:
+		char inChar = (char)Serial.read();
+		// add it to the inputString:
+		Serial.write(inChar);
+		buffer[tail] = inChar;
+		tail = (++tail) % bufferSize;
 	}
 }
 
@@ -83,8 +83,73 @@ void Control::turn (int num)
 	_centerLeg += num;
 	_centerLeg %= LEGNUM;
 }
-
-void Control::moveForward (int num)
+void Control::standUp ()
 {
-
+	for (int i = 0; i < SERVONUM; ++i)
+		pwm.set (i, 90);
+}
+void Control::moveForward (int steps)
+{
+	while (--steps >= 0)
+	{
+		//jugde and lift the left triangles
+		for (int i = 0; i < 6; i += 2)
+		{
+		  pwm.set(servoVirtual(i, MID), 45);
+		  pwm.set(servoVirtual(i, OUT), 135);
+		}
+		delay(100);
+		//then move them
+		pwm.set(servoVirtual(0, IN), 45);
+		pwm.set(servoVirtual(2, IN), 45);
+		pwm.set(servoVirtual(4, IN), 135);
+		//then put down them
+		delay(100);
+		for (int i = 0; i < 6; i += 2)
+		{
+		  	pwm.set(servoVirtual(i, MID), 90);
+		  	pwm.set(servoVirtual(i, OUT), 90);
+		}
+		delay(100);
+		//lift the other three
+		for (int i = 1; i < 6; i += 2)
+		{
+		  	pwm.set(servoVirtual(i, MID), 45);
+		  	pwm.set(servoVirtual(i, OUT), 135);
+		}
+		delay(100);
+		//reset the first triangles
+		for (int i = 0; i < 6; i += 2)
+		  	pwm.set(servoVirtual(i, IN), 90);
+		//move the second triangles
+		delay(100);
+		pwm.set(servoVirtual(1, IN), 45);
+		pwm.set(servoVirtual(3, IN), 135);
+		pwm.set(servoVirtual(5, IN), 135);
+		//put down them
+		delay(100);
+		for (int i = 1; i < 6; i += 2)
+		{
+			pwm.set(servoVirtual(i, MID), 90);
+			pwm.set(servoVirtual(i, OUT), 90);
+		}
+		delay(100);
+		//lift the first one
+		for (int i = 0; i < 6; i += 2)
+		{
+		  	pwm.set(servoVirtual(i, MID), 45);
+		  	pwm.set(servoVirtual(i, OUT), 135);
+		}
+		delay(100);
+		//reset the second one
+		for (int i = 1; i < 6; i += 2)
+		  	pwm.set(servoVirtual(i, IN), 90);
+		delay(100);
+	}
+	for (int i = 0; i < 6; i += 2)
+	{
+	  	pwm.set(servoVirtual(i, MID), 90);
+	  	pwm.set(servoVirtual(i, OUT), 90);
+	}
+	delay(100);
 }

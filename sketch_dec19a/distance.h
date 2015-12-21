@@ -12,10 +12,10 @@ class Distance
     float operator[] (int rank) {
       return distances[rank];
     }
-    void update();//update data
-    void setup();//set up
-    void echo (int rank = 0);//
-    void echoAll();
+    void update();//更新距离，每回合都应当调用一次
+    void setup();//初始化
+    void echo (int rank = 0);//在蓝牙上显示
+    void echoAll();//显示全部
     Distance();
   private:
     float distances[distanceNum];

@@ -14,7 +14,8 @@ void Pwm::setup ()
 
 void Pwm::setForMega (int rank, int degree)
 {
-	servoOnMega[rank].write(degree);
+	int val = map (degree, 0, 180, 500, 2500);
+	servoOnMega[rank].writeMicroseconds(val);
 	delay(2);
 }
 
@@ -26,10 +27,6 @@ void Pwm::setForPca (int rank, int degree)
 
 void Pwm::set (int rank, int degree)
 {
-	Serial.print("rank:");
-	Serial.print(rank);
-	Serial.print("degree:");
-	Serial.println(degree);
 	int realDegree = degree + degreeError[rank];
 	if (rank < SERVO_ON_MEGA)
 		setForMega (rank, realDegree);

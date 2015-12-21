@@ -44,6 +44,7 @@ void setup() {
   control.setup();
   distance.setup();
   pwm.setup();
+  control.standUp ();
 }
 void runCmd()
 {
@@ -58,10 +59,6 @@ void runCmd()
   {
     int rank = control.getArg();
     int degree = control.getArg();
-    Serial.print("rank:");
-    Serial.print(rank);
-    Serial.print("degree:");
-    Serial.println(degree);
     pwm.set (rank, degree);
   }
 }
@@ -74,4 +71,39 @@ void loop()
   delay (500);
   if (control.mode() == CONTROLED)
     runCmd();
+  //testServo ();
+  //checkServo (4);
+}
+
+void testServo()
+{
+  for (int i = 60; i <= 120; i += 1)
+  {
+    for (int j = 0; j < 18; ++j)
+      pwm.set (j, i);
+    delay (10);
+  }
+  delay (500);
+  for (int i = 120; i >= 60; i -= 1)
+  {
+    for (int j = 0; j < 18; ++j)
+      pwm.set (j, i);
+    delay (10);
+  }
+
+  delay (500);
+}
+
+void checkServo (int rank)
+{
+  pwm.set (rank, 0);
+  delay (2000);
+  pwm.set (rank, 45);
+  delay (2000);
+  pwm.set (rank, 90);
+  delay (2000);
+  pwm.set (rank, 135);
+  delay (2000);
+  pwm.set (rank, 180);
+  delay (2000);
 }
