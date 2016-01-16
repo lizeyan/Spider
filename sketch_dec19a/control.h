@@ -2,7 +2,7 @@
 #define ___CONTROL___
 
 #define CONTROLED 1
-#define FIND_LIGHT 2
+#define AUTO 2
 
 #define OUT 2
 #define MID 1
@@ -12,6 +12,9 @@
 #define TL 1
 #define TR 2
 #define SC 3
+#define SL 6
+#define CHANGE_CONTROLED 4
+#define CHANGE_AUTO 5
 
 #define LEGNUM 6
 #define SERVONUM 18
@@ -22,6 +25,8 @@ class Control
 public:
 	Control (): _mode(CONTROLED) {}
 	int mode() {return _mode;}
+	int setMode (int x) {_mode = x;}
+	int getCenterLeg(){return _centerLeg;}
 	void setup();//初始化
 public:
 	int getCmd();//从缓冲区取出一个命令
@@ -32,6 +37,7 @@ public:
 	void standUp();//站起来
 	void moveForward(int num);//向前num步！！！
 	void turn (int num);//旋转主方向
+	void turnTo (int rank);
 private:
 	int _mode;
 	int _centerLeg;//the left top leg's rank//当前主方向的0号腿实际是记号几号腿
