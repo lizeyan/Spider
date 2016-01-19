@@ -121,7 +121,7 @@ void Control::moveForward (int steps)
 	int outdown = 145;//外侧舵机站立时的角度
 	int middown = 145;//中间舵机站立时的角度
 	int midup = 180;//中间舵机抬起时的角度
-	//转换形态，把一对前腿向后转
+	//转换形态，把一对前腿向后转，转变成左右镜面对称的形式。Figure2
 	pwm.set (servoVirtual(0, IN), 120);
 	pwm.set (servoVirtual(5, IN), 60);
 	int tmpSteps = steps;
@@ -145,7 +145,7 @@ void Control::moveForward (int steps)
 		pwm.set(servoVirtual(0, IN), 90);
 		pwm.set(servoVirtual(2, IN), 60);
 		pwm.set(servoVirtual(4, IN), 120);
-		//放下这个三角形
+		//放下这个三角形.Figure3
 		delay(delaytime);
 		for (int i = 0; i < 6; i += 2)
 		{
@@ -164,7 +164,7 @@ void Control::moveForward (int steps)
 		pwm.set (servoVirtual(0, IN), 120);
 		pwm.set (servoVirtual(2, IN), 90);
 		pwm.set (servoVirtual(4, IN), 90);
-		//同时第二个三角形前移
+		//同时第二个三角形前移.Figure4
 		pwm.set(servoVirtual(1, IN), 75);
 		pwm.set(servoVirtual(3, IN), 120);
 		pwm.set(servoVirtual(5, IN), 90);
