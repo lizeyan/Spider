@@ -1,0 +1,3 @@
+Adafruit-PWM-Servo-Driver-Library-master 中为PCA9685扩展板的库文件，复制到Arduino安装目录下的libraries文件夹中即可使用。
+source为六足机器人的源代码。
+document.pdf为参考文档。
